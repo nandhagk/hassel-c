@@ -56,7 +56,7 @@ map_find (const struct map *m, int key)
 }*/
 {
   struct map_elem tmp = {key};
-  return bsearch (&tmp, m->elems, m->used, sizeof *m->elems, map_elem_cmp);
+  return (struct map_elem *) bsearch (&tmp, m->elems, m->used, sizeof *m->elems, map_elem_cmp);
 }
 
 static inline struct map_elem *
@@ -67,7 +67,7 @@ map_find_create (struct map *m, int key)
 
   if (m->used == m->alloc) {
     m->alloc = m->alloc ? 2 * m->alloc : MAP_START_SIZE;
-    m->elems = xrealloc (m->elems, m->alloc * sizeof *m->elems);
+    m->elems = (struct map_elem *) xrealloc (m->elems, m->alloc * sizeof *m->elems);
   }
   e = &m->elems[m->used++];
   memset (e, 0, sizeof *e);
